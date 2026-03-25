@@ -20,6 +20,6 @@ pub mod prelude {
 pub use domain::agents::Agent;
 pub use domain::skills::{Skill, SkillRegistry};
 pub use domain::tools::{Tool, ToolRegistry, ToolCall};
-pub use domain::memory::{Memory, MemoryStore};
+pub use domain::memory::{MemoryEntry, MemoryStore};
 pub use domain::context::{Context, Output};
 pub use infrastructure::error::{Error, Result};

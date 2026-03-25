@@ -97,13 +97,13 @@ impl Default for ShortTermMemory {
 /// Memory store trait - for long-term memory
 pub trait MemoryStore: Send + Sync {
     /// Save a memory entry
-    fn save(&self, entry: &MemoryEntry) -> Result<(), String>;
+    fn save(&mut self, entry: &MemoryEntry) -> Result<(), String>;
 
     /// Search memories
     fn search(&self, query: &str, limit: usize) -> Result<Vec<MemoryEntry>, String>;
 
     /// Clear all memories
-    fn clear(&self) -> Result<(), String>;
+    fn clear(&mut self) -> Result<(), String>;
 }
 
 /// In-memory store (for testing)
@@ -126,7 +126,7 @@ impl Default for InMemoryStore {
 }
 
 impl MemoryStore for InMemoryStore {
-    fn save(&self, entry: &MemoryEntry) -> Result<(), String> {
+    fn save(&mut self, entry: &MemoryEntry) -> Result<(), String> {
         self.entries.push(entry.clone());
         Ok(())
     }
@@ -141,7 +141,7 @@ impl MemoryStore for InMemoryStore {
         Ok(results)
     }
 
-    fn clear(&self) -> Result<(), String> {
+    fn clear(&mut self) -> Result<(), String> {
         self.entries.clear();
         Ok(())
     }
@@ -157,7 +157,7 @@ impl<S: MemoryStore> LongTermMemory<S> {
         Self { store }
     }
 
-    pub fn add(&self, entry: MemoryEntry) -> Result<(), String> {
+    pub fn add(&mut self, entry: MemoryEntry) -> Result<(), String> {
         self.store.save(&entry)
     }
 
@@ -165,7 +165,7 @@ impl<S: MemoryStore> LongTermMemory<S> {
         self.store.search(query, limit)
     }
 
-    pub fn clear(&self) -> Result<(), String> {
+    pub fn clear(&mut self) -> Result<(), String> {
         self.store.clear()
     }
 }
